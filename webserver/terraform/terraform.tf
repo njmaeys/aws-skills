@@ -243,7 +243,8 @@ resource "aws_iam_policy" "stream_policy" {
     {
       "Action": [
         "es:*",
-        "lambda:*"
+        "lambda:*",
+        "lambda:AWSLambdaVPCAccessExecutionRole"
       ],
       "Effect": "Allow",
       "Resource": "*"
