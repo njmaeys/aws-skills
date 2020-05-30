@@ -1,7 +1,7 @@
 # AWS-Skills  
 
 # TODOs  
-- AWS Managed Elasticsearch in a VPC
+- Clean up formatting!
 - Try to break up the terraform templates
 
 # Nice TODOs
@@ -16,6 +16,22 @@ Each subset of the repo has a terraform dir intended to serve as the launcher fo
 
 ## Webserver
 Running on Amazon Linux Images
+- I think I'm going to make an AMI with the logger installed as there is setup that has to be done that I don't think I can manage progromatically.
 
-Need to provide the webserver terraform variables or it will use defaults.  
-- Defaults are in the variables.tf
+AMI Setup
+
+- curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+
+- sudo python ./awslogs-agent-setup.py --region us-west-2
+
+- Follow the prompts and use defaults
+-- You don't need to set access keys or secrets
+
+- Only need to add two things
+-- log file location : /var/log/httpd/access\_log
+-- cloud watch group : webserver-access-logs
+
+**Logs**
+- `/var/log/httpd/access_log`
+- TODO - get them to cloudwatch
+- TODO - get elasticsearch to read them

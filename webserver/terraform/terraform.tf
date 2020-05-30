@@ -1,5 +1,5 @@
 provider "aws" {
-    region  = var.region
+    region  = "us-west-2"
     profile = "njmaeys"
 }
 
@@ -60,7 +60,7 @@ resource "aws_security_group" "allow_tls" {
 data "aws_ami" "selected_aws_linux" {
   most_recent = true
 
-  owners = ["amazon"]
+  owners = ["883980837948"]
 
   filter {
     name   = "root-device-type"
@@ -68,8 +68,8 @@ data "aws_ami" "selected_aws_linux" {
   }
 
   filter {
-    name   = "description"
-    values = ["Amazon Linux AMI 2018.*"]
+    name   = "name"
+    values = ["aws-skills-web-ami"]
   }
 }
 
@@ -81,6 +81,7 @@ resource "aws_instance" "web1" {
     ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
+    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
     subnet_id = "subnet-b38e4fcb"
     vpc_security_group_ids = [
         "${aws_security_group.allow_tls.id}"
@@ -103,6 +104,7 @@ resource "aws_instance" "web2" {
     ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
+    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
     subnet_id = "subnet-c404e78e"
     vpc_security_group_ids = [
         "${aws_security_group.allow_tls.id}"
@@ -149,4 +151,57 @@ resource "aws_elb" "web_elb" {
   tags = {
     Name = "web-elb"
   }
+}
+
+########### IAM ROLE #########
+resource "aws_iam_instance_profile" "web_profile" {
+  name = "web_profile"
+  role = "${aws_iam_role.web_role.name}"
+}
+
+resource "aws_iam_role" "web_role" {
+  name = "web-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "main_policy" {
+  name        = "main-policy"
+  description = "My main policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:*",
+        "logs:*",
+        "es:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "main_attach" {
+  role       = "${aws_iam_role.web_role.name}"
+  policy_arn = "${aws_iam_policy.main_policy.arn}"
 }

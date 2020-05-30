@@ -1,8 +1,12 @@
 # TERRAFORM
 
-# vpc
-vpc/terraform/.terraform/
-vpc/terraform/terraform.tfstate*
+# ami
+ami_creation/terraform/.terraform/
+ami_creation/terraform/terraform.tfstate*
+
+# elasticsearch
+elasticsearch/terraform/.terraform/
+elasticsearch/terraform/terraform.tfstate*
 
 # webserver
 webserver/terraform/.terraform/
