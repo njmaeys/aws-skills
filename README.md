@@ -9,7 +9,7 @@ Each subset of the repo has a terraform dir intended to serve as the launcher fo
 ## VPC
 
 ## Webserver
-Running on Ubuntu t2.micro.
+Running on Amazon Linux Images
 
 Need to provide the webserver terraform variables or it will use defaults.  
 - Defaults are in the variables.tf

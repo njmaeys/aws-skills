@@ -42,11 +42,7 @@ resource "aws_security_group" "allow_tls" {
         from_port   = 80
         to_port     = 80
         protocol    = "tcp"
-        cidr_blocks = [
-            data.aws_vpc.main.cidr_block,
-            "172.31.0.0/16",
-            "76.92.128.2/32"
-        ]
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
     egress {
@@ -121,4 +117,36 @@ resource "aws_instance" "web2" {
 
     key_name = "general_ssh"
 
+}
+
+####### ELB #####
+
+resource "aws_elb" "web_elb" {
+
+  name               = "web-elb"
+  availability_zones = ["us-west-2a", "us-west-2b"]
+
+  listener {
+    instance_port     = 80
+    instance_protocol = "http"
+    lb_port           = 80
+    lb_protocol       = "http"
+  }
+
+  instances                   = [
+        "${aws_instance.web1.id}",
+        "${aws_instance.web2.id}",
+    ]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    target              = "TCP:80"
+    interval            = 15
+  }
+
+  tags = {
+    Name = "web-elb"
+  }
 }
