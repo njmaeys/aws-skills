@@ -28,7 +28,7 @@ AMI Setup
 -- You don't need to set access keys or secrets
 
 - Only need to add two things
--- log file location : /var/log/httpd/access_log
+-- log file location : /var/log/httpd/access\_log
 -- cloud watch group : webserver-access-logs
 
 **Logs**
