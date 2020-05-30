@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "us-west-2"
+    region  = "us-west-2"
     profile = "njmaeys"
 }
 
@@ -38,7 +38,7 @@ data "aws_ami" "ubuntu" {
 
 data "aws_subnet" "selected" {
     vpc_id = "vpc-1d7e0a65"
-    id = "subnet-21f8287c"
+    id     = "subnet-21f8287c"
 }
 
 data "aws_security_group" "selected" {
@@ -50,7 +50,7 @@ data "aws_security_group" "selected" {
 
 resource "aws_instance" "web" {
 
-    ami = "${data.aws_ami.ubuntu.id}"
+    ami           = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
 
     vpc_security_group_ids = [data.aws_security_group.selected.id]

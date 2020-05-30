@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "us-west-2"
+    region  = "us-west-2"
     profile = "njmaeys"
 }
 
@@ -39,9 +39,20 @@ resource "aws_security_group" "allow_tls" {
 
     ingress {
         description = "SSH from VPC"
-        from_port = 22
-        to_port = 22
-        protocol= "tcp"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = [
+            aws_vpc.main.cidr_block,
+            "76.92.128.2/32"
+        ]
+    }
+
+    ingress {
+        description = "HTTP access"
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
         cidr_blocks = [
             aws_vpc.main.cidr_block,
             "76.92.128.2/32"
@@ -49,9 +60,9 @@ resource "aws_security_group" "allow_tls" {
     }
 
     egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
         cidr_blocks = ["0.0.0.0/0"]
     }
 

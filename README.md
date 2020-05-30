@@ -4,7 +4,9 @@
 Version being used  
 - Terraform v0.12.16  
 
-Each subset of the repo has a terraform dir intended to serve as the launcher for the necessary resources
+Each subset of the repo has a terraform dir intended to serve as the launcher for the necessary resources.
 
 ## VPC
 
+## Webserver
+Running on Ubuntu t2.micro.
