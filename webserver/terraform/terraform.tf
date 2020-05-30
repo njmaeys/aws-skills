@@ -1,5 +1,5 @@
 provider "aws" {
-    region  = "us-west-2"
+    region  = var.region
     profile = "njmaeys"
 }
 
@@ -8,58 +8,117 @@ provider "aws" {
 # Set up the ELB and ensure that the ec2 instance below is configured in it
 
 
-######### EC2 INSTANCE #########
-# TODO
-# Set up a user data profile to be able to install the webserver and launch it
-
 data "aws_vpc" "main" {
     tags = {
-        Name = "main"
+        Name = "w2-main"
     }
 }
 
-data "aws_ami" "ubuntu" {
 
-    most_recent = true
+######### SECURITY GROUP #########
 
-    filter {
-        name   = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
-    }
+resource "aws_security_group" "allow_tls" {
 
-    filter {
-        name   = "virtualization-type"
-        values = ["hvm"]
-    }
+    name = "allow_tls"
 
-    owners = ["099720109477"]
+    description = "Allow TLS"
 
-}
-
-data "aws_subnet" "selected" {
     vpc_id = "vpc-1d7e0a65"
-    id     = "subnet-21f8287c"
+
+    ingress {
+        description = "SSH from VPC"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = [
+            data.aws_vpc.main.cidr_block,
+            "172.31.0.0/16",
+            "76.92.128.2/32"
+        ]
+    }
+
+    ingress {
+        description = "HTTP access"
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
+        cidr_blocks = [
+            data.aws_vpc.main.cidr_block,
+            "172.31.0.0/16",
+            "76.92.128.2/32"
+        ]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name = "allow_TLS"
+    }
 }
 
-data "aws_security_group" "selected" {
+data "aws_ami" "selected_aws_linux" {
+  most_recent = true
+
+  owners = ["amazon"]
+
   filter {
-    name   = "group-name"
-    values = ["allow_tls"]
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "description"
+    values = ["Amazon Linux AMI 2018.*"]
   }
 }
 
-resource "aws_instance" "web" {
 
-    ami           = "${data.aws_ami.ubuntu.id}"
+######## INSTANCES ###########
+# ONE
+resource "aws_instance" "web1" {
+
+    ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
-    vpc_security_group_ids = [data.aws_security_group.selected.id]
+    subnet_id = "subnet-b38e4fcb"
+    vpc_security_group_ids = [
+        "${aws_security_group.allow_tls.id}"
+    ]
 
     tags = {
-        Name = "WebServer"
+        Name    = "server-one",
+        Product = "WebServer"
     }
+
+    user_data = "${file("../launch_webserver.sh")}"
 
     key_name = "general_ssh"
 
 }
 
+# TWO
+resource "aws_instance" "web2" {
+
+    ami           = data.aws_ami.selected_aws_linux.id
+    instance_type = "t2.micro"
+
+    subnet_id = "subnet-c404e78e"
+    vpc_security_group_ids = [
+        "${aws_security_group.allow_tls.id}"
+    ]
+
+    tags = {
+        Name    = "server-two",
+        Product = "WebServer"
+    }
+
+    user_data = "${file("../launch_webserver.sh")}"
+
+    key_name = "general_ssh"
+
+}

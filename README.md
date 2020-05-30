@@ -10,3 +10,6 @@ Each subset of the repo has a terraform dir intended to serve as the launcher fo
 
 ## Webserver
 Running on Ubuntu t2.micro.
+
+Need to provide the webserver terraform variables or it will use defaults.  
+- Defaults are in the variables.tf
