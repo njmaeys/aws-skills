@@ -2,7 +2,6 @@
 
 # TODOs  
 - Clean up formatting!
-- Potentially Kinesis to get logs to s3
 - Try to break up the terraform templates
 
 # Nice TODOs
