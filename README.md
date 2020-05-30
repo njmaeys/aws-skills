@@ -33,5 +33,4 @@ AMI Setup
 
 **Logs**
 - `/var/log/httpd/access_log`
-- TODO - get them to cloudwatch
 - TODO - get elasticsearch to read them
