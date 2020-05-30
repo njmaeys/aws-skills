@@ -23,7 +23,7 @@ resource "aws_elasticsearch_domain" "web_logs" {
     ]
 
     security_group_ids = [
-        "sg-0daa7fba855f0e214"
+        "sg-0bf0e26a9805f0d02"
     ]
   }
 
