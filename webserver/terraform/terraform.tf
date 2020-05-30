@@ -60,7 +60,7 @@ resource "aws_security_group" "allow_tls" {
 data "aws_ami" "selected_aws_linux" {
   most_recent = true
 
-  owners = ["amazon"]
+  owners = ["883980837948"]
 
   filter {
     name   = "root-device-type"
@@ -68,8 +68,8 @@ data "aws_ami" "selected_aws_linux" {
   }
 
   filter {
-    name   = "description"
-    values = ["Amazon Linux AMI 2018.*"]
+    name   = "name"
+    values = ["aws-skills-web-ami"]
   }
 }
 
@@ -155,12 +155,12 @@ resource "aws_elb" "web_elb" {
 
 ########### IAM ROLE #########
 resource "aws_iam_instance_profile" "web_profile" {
-  name = "webserver-profile"
-  role = "${aws_iam_role.main_role.name}"
+  name = "web_profile"
+  role = "${aws_iam_role.web_role.name}"
 }
 
-resource "aws_iam_role" "main_role" {
-  name = "main-role"
+resource "aws_iam_role" "web_role" {
+  name = "web-role"
 
   assume_role_policy = <<EOF
 {
@@ -169,11 +169,7 @@ resource "aws_iam_role" "main_role" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": [
-            "ec2.amazonaws.com",
-            "logs.amazonaws.com",
-            "es.amazonaws.com"
-        ]
+        "Service": "ec2.amazonaws.com"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -181,4 +177,31 @@ resource "aws_iam_role" "main_role" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_policy" "main_policy" {
+  name        = "main-policy"
+  description = "My main policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:*",
+        "logs:*",
+        "es:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "main_attach" {
+  role       = "${aws_iam_role.web_role.name}"
+  policy_arn = "${aws_iam_policy.main_policy.arn}"
 }

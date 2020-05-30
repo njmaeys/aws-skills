@@ -1,5 +1,9 @@
 # TERRAFORM
 
+# ami
+ami_creation/terraform/.terraform/
+ami_creation/terraform/terraform.tfstate*
+
 # elasticsearch
 elasticsearch/terraform/.terraform/
 elasticsearch/terraform/terraform.tfstate*
