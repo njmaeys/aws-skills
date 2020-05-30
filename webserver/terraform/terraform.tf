@@ -36,15 +36,9 @@ data "aws_ami" "ubuntu" {
 
 }
 
-data "aws_vpc" "selected" {
-    tags = {
-        Name = "main"
-    }
-}
-
 data "aws_subnet" "selected" {
-    vpc_id = data.aws_vpc.selected.id
-    id = "subnet-07aa55adefc16a0ef"
+    vpc_id = "vpc-1d7e0a65"
+    id = "subnet-21f8287c"
 }
 
 data "aws_security_group" "selected" {

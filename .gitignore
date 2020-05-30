@@ -1,3 +1,9 @@
-# terraform
-**/**/.terraform/*
-**/terraform/terraform.tfstate*
+# TERRAFORM
+
+# vpc
+vpc/terraform/.terraform/
+vpc/terraform/terraform.tfstate*
+
+# webserver
+webserver/terraform/.terraform/
+webserver/terraform/terraform.tfstate*
