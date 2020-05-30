@@ -190,8 +190,7 @@ resource "aws_iam_policy" "main_policy" {
     {
       "Action": [
         "ec2:*",
-        "logs:*",
-        "es:*"
+        "logs:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
@@ -204,4 +203,57 @@ EOF
 resource "aws_iam_role_policy_attachment" "main_attach" {
   role       = "${aws_iam_role.web_role.name}"
   policy_arn = "${aws_iam_policy.main_policy.arn}"
+}
+
+####################
+
+resource "aws_iam_instance_profile" "stream_profile" {
+  name = "stream_profile"
+  role = "${aws_iam_role.stream_role.name}"
+}
+
+resource "aws_iam_role" "stream_role" {
+  name = "stream-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "stream_policy" {
+  name        = "stream-policy"
+  description = "My stream policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "es:*",
+        "lambda:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "stream_attach" {
+  role       = "${aws_iam_role.stream_role.name}"
+  policy_arn = "${aws_iam_policy.stream_policy.arn}"
 }

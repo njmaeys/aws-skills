@@ -31,6 +31,22 @@ AMI Setup
 -- log file location : /var/log/httpd/access\_log
 -- cloud watch group : webserver-access-logs
 
+Source for helping get logs pushed to cloudwatch:  
+- https://devopscube.com/how-to-setup-and-push-serverapplication-logs-to-aws-cloudwatch/
+
 **Logs**
 - `/var/log/httpd/access_log`
 - TODO - get elasticsearch to read them
+
+## Prowler
+Can likely put this behind a lambda function that spins up a micro EC2 on a cron scheduler.
+I need to get it running first and figure out the right IAM role permissions it needs.
+Then I need to see what it outputs and figure out how to get it to send that to cloudwatch.
+- Maybe I can pump the results to a JSON file and then stream that as a payload with the cli?
+
+Preliminary steps:
+- sudo yum install git -y
+- sudo yum install jq
+- git clone https://github.com/toniblyx/prowler
+- cd prowler
+- ./prowler
