@@ -1,7 +1,8 @@
 # AWS-Skills  
 
 # TODOs  
-- AWS Managed Elasticsearch in a VPC
+- Clean up formatting!
+- Potentially Kinesis to get logs to s3
 - Try to break up the terraform templates
 
 # Nice TODOs
@@ -17,5 +18,7 @@ Each subset of the repo has a terraform dir intended to serve as the launcher fo
 ## Webserver
 Running on Amazon Linux Images
 
-Need to provide the webserver terraform variables or it will use defaults.  
-- Defaults are in the variables.tf
+**Logs**
+- `/var/log/httpd/access_log`
+- TODO - get them to cloudwatch
+- TODO - get elasticsearch to read them

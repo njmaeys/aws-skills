@@ -1,5 +1,5 @@
 provider "aws" {
-    region  = var.region
+    region  = "us-west-2"
     profile = "njmaeys"
 }
 
@@ -81,6 +81,7 @@ resource "aws_instance" "web1" {
     ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
+    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
     subnet_id = "subnet-b38e4fcb"
     vpc_security_group_ids = [
         "${aws_security_group.allow_tls.id}"
@@ -103,6 +104,7 @@ resource "aws_instance" "web2" {
     ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
+    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
     subnet_id = "subnet-c404e78e"
     vpc_security_group_ids = [
         "${aws_security_group.allow_tls.id}"
@@ -149,4 +151,34 @@ resource "aws_elb" "web_elb" {
   tags = {
     Name = "web-elb"
   }
+}
+
+########### IAM ROLE #########
+resource "aws_iam_instance_profile" "web_profile" {
+  name = "webserver-profile"
+  role = "${aws_iam_role.main_role.name}"
+}
+
+resource "aws_iam_role" "main_role" {
+  name = "main-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+            "ec2.amazonaws.com",
+            "logs.amazonaws.com",
+            "es.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }
