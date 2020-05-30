@@ -36,12 +36,30 @@ data "aws_ami" "ubuntu" {
 
 }
 
+data "aws_vpc" "selected" {
+    tags = {
+        Name = "main"
+    }
+}
+
+data "aws_subnet" "selected" {
+    vpc_id = data.aws_vpc.selected.id
+    id = "subnet-07aa55adefc16a0ef"
+}
+
+data "aws_security_group" "selected" {
+  filter {
+    name   = "group-name"
+    values = ["allow_tls"]
+  }
+}
+
 resource "aws_instance" "web" {
 
     ami = "${data.aws_ami.ubuntu.id}"
     instance_type = "t2.micro"
 
-    vpc_security_group_ids = ["sg-6d37e93e"]
+    vpc_security_group_ids = [data.aws_security_group.selected.id]
 
     tags = {
         Name = "WebServer"
@@ -50,3 +68,4 @@ resource "aws_instance" "web" {
     key_name = "general_ssh"
 
 }
+

@@ -16,22 +16,36 @@ resource "aws_vpc" "main" {
     }
 }
 
+######### SUBNET #########
+
+resource "aws_subnet" "main" {
+    vpc_id     = "${aws_vpc.main.id}"
+    cidr_block = "10.0.1.0/24"
+
+    tags = {
+        Name = "Main"
+    }
+}
+
 ######### SECURITY GROUP #########
 
 resource "aws_security_group" "allow_tls" {
 
-    name        = "allow_tls"
+    name = "allow_tls"
 
     description = "Allow TLS"
 
-    vpc_id      = "${aws_vpc.main.id}"
+    vpc_id = "vpc-1d7e0a65"
 
     ingress {
         description = "SSH from VPC"
         from_port = 22
         to_port = 22
         protocol= "tcp"
-        cidr_blocks = [aws_vpc.main.cidr_block]
+        cidr_blocks = [
+            aws_vpc.main.cidr_block,
+            "76.92.128.2/32"
+        ]
     }
 
     egress {
