@@ -11,7 +11,7 @@ def  launch_prowler(event, context):
         InstanceType='t2.micro',
         DisableApiTermination=False,
         SubnetId='subnet-b38e4fcb',
-        UserData=open("/var/task/lambda/provisioner.sh").read(),
+        UserData=open("/var/task/lambdas/provisioner.sh").read(),
         MinCount=1,
         MaxCount=1,
         TagSpecifications=[
