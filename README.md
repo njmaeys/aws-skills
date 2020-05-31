@@ -22,6 +22,20 @@ the kibana view then maybe it would be easier to understand. In the interest of 
 log groups to stream to it by manual configuration. There has to be something fundamental I'm just missing the mark on
 that would make this whole tool way more understandable.
 
+**From the Docs**  
+https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-vpc-security
+```
+When you create a domain with VPC access, the endpoint looks similar to a public endpoint:
+
+https://vpc-domain-name-identifier.region.es.amazonaws.com
+If you try to access the endpoint in a web browser, however, you might find that the request times out. 
+To perform even basic GET requests, your computer must be able to connect to the VPC. This connection often takes 
+the form of a VPN, managed network, or proxy server. For details on the various forms it can take, see 
+Scenarios and Examples in the Amazon VPC User Guide. For a development-focused example, see Testing VPC Domains.
+```  
+All that being said I'll try to create a VPN or a Proxy and see if i can connect that way. Beginning to get exhausted
+and am going to throw in the towel at some point.
+
 ## Webserver
 Running on Amazon Linux Images
 - I think I'm going to make an AMI with the logger installed as there is setup that has to be done that I don't think I can manage progromatically.
