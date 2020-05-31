@@ -1,0 +1,10 @@
+#   This file is meant to handle spacing per file type
+#   You can find more details here: http://editorconfig.org/
+
+[*.tf]
+indent_style = spaces
+indent_size = 2
+
+[*.py]
+indent_style = spaces
+indent_size = 4

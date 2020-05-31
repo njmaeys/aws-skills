@@ -3,18 +3,22 @@
 # ami
 ami_creation/terraform/.terraform/
 ami_creation/terraform/terraform.tfstate*
+ami_creation/terraform/.terraform.*
 
 # elasticsearch
 elasticsearch/terraform/.terraform/
 elasticsearch/terraform/terraform.tfstate*
+elasticsearch/terraform/.terraform.*
 
 # webserver
 webserver/terraform/.terraform/
 webserver/terraform/terraform.tfstate*
+webserver/terraform/.terraform.*
 
 # prowler
 prowler/terraform/.terraform/
 prowler/terraform/terraform.tfstate*
+prowler/terraform/.terraform.*
 
 prowler/.venv/
 prowler/bin/

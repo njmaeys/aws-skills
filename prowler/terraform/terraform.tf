@@ -83,16 +83,6 @@ resource "aws_lambda_function" "s3_to_es" {
   timeout          = 360
   layers           = ["arn:aws:lambda:us-west-2:883980837948:layer:python-pip-packages:1"]
 
-  vpc_config {
-      subnet_ids = [
-        "subnet-b38e4fcb"
-      ]
-
-      security_group_ids = [
-          "sg-6d37e93e"
-      ]
-  }
-
 }
 
 resource "aws_s3_bucket_notification" "prowler_log_trigger" {

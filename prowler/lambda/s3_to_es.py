@@ -4,6 +4,8 @@ import json
 
 def  s3_to_es_prowler(event, context):
 
+    s3_client = boto3.client('s3')
+
     for record in event['Records']:
 
         # Get the bucket name and key for the new file
@@ -11,7 +13,7 @@ def  s3_to_es_prowler(event, context):
         key = record['s3']['object']['key']
 
         # Get, read, and split the file into lines
-        obj = s3.get_object(Bucket=bucket, Key=key)
+        obj = s3_client.get_object(Bucket=bucket, Key=key)
         body = obj['Body'].read()
         lines = body.splitlines()
 

@@ -12,5 +12,5 @@ Follow the prompts and use defaults
 - You don't need to set access keys or secrets
 
 Only need to add two things during prompts look for:  
-- log file location : `/var/log/httpd/access\_log`  
+- log file location : `/var/log/httpd/access_log`  
 - cloud watch group : `webserver-access-logs`  
