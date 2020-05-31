@@ -4,9 +4,6 @@ provider "aws" {
 }
 
 ######### ELB #########
-# TODO 
-# Set up the ELB and ensure that the ec2 instance below is configured in it
-
 
 data "aws_vpc" "main" {
     tags = {
@@ -190,7 +187,8 @@ resource "aws_iam_policy" "main_policy" {
     {
       "Action": [
         "ec2:*",
-        "logs:*"
+        "logs:*",
+        "iam:*"
       ],
       "Effect": "Allow",
       "Resource": "*"

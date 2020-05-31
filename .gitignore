@@ -13,6 +13,9 @@ webserver/terraform/.terraform/
 webserver/terraform/terraform.tfstate*
 
 # prowler
+prowler/terraform/.terraform/
+prowler/terraform/terraform.tfstate*
+
 prowler/.venv/
 prowler/bin/
 prowler/lambda/*.pyc
