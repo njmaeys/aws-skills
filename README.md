@@ -1,54 +1,48 @@
 # AWS-Skills  
 
-# TODOs  
-- Clean up formatting!
-- Try to break up the terraform templates
-
-# Nice TODOs
-- Deployment pipeline
-- Controler functionality at top level
-
 ## Terraform  
 Version being used  
 - Terraform v0.12.26  
 
-Each subset of the repo has a terraform dir intended to serve as the launcher for the necessary resources.
+Each subset of the repo has a terraform dir intended to serve as the launcher for the necessary resources.  
+
+When it comes to security best practices I know there is a LOT I need to learn. Much of my time was spent 
+learning and trying to integrate the tools. Continual learning is the best way I can manage to get the lacking
+security best practices up to speed.
 
 ## Elasticsearch
 The elasticsearch is defined in terraform but it made more sense to me to hook up the log groups manually.  
-I've seen that there is data flowing to the elasticsearch but have not been able to access the kibana app.  
+
+This tool is by far the strangest to me and I'm struggling to wrap my head around it. It would be nice if I could get to
+the kibana view then maybe it would be easier to understand. In the interest of making forward progress I'm just setting
+log groups to stream to it by manual configuration. There has to be something fundamental I'm just missing the mark on
+that would make this whole tool way more understandable.
 
 ## Webserver
 Running on Amazon Linux Images
 - I think I'm going to make an AMI with the logger installed as there is setup that has to be done that I don't think I can manage progromatically.
 
 AMI Setup
-
-- curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
-
-- sudo python ./awslogs-agent-setup.py --region us-west-2
-
-- Follow the prompts and use defaults
--- You don't need to set access keys or secrets
-
-- Only need to add two things
--- log file location : `/var/log/httpd/access\_log`
--- cloud watch group : `webserver-access-logs`
-
-Source for helping get logs pushed to cloudwatch:  
-- https://devopscube.com/how-to-setup-and-push-serverapplication-logs-to-aws-cloudwatch/
+- See README in `ami_creation`
 
 ## Prowler
+
+TODO - Put lambda that spins up ec2 on cron to run daily
+TODO - Need to figure out a way to terminate EC2 instance on completion  
+- I think it makes sense to have the s3 bucket lambda kill the instance as well since it should be done if the file is in s3  
+
 Prowler appears to be doing a lot of stuff. In the interest of time right now going to try to get results into cloudwatch regardless.  
 I know there are going to be failures that it can't read at the moment but, I need to get logs flowing.
 
-Thought about trying out kinesis but it is not in the Free Tier, not goin to try but does seem interesting.  
-
+**Flow**  
 Prowler dumps results to the git dir location in `/output/` so I can copy that to an S3 bucket after the results are done.
-
-TODO - Put lambda that spins up ec2 on cron to run daily
-TODO - Need to figure out a way to terminate EC2 instance on completion - SNS on bucket push?
-Flow:  
 - The `run_prowler` lambda functions spins up and EC2 instance  
 - The user data on the lambda downloads an execution script from s3  
 - The execution script runs prowler with json flag set and then pushes results to S3 on completion  
+
+**Run Logs**
+This could have been done differently for sure but here is the process:  
+- S3 bucket triggers a lambda function to push out the row items to cloudwatch logs
+- The log group of the lambda function is then streamed to Elasticsearch via manual config on the log group  
+
+Thought about trying out kinesis but it is not in the Free Tier, not goin to try but does seem interesting.  
