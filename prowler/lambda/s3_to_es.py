@@ -2,7 +2,52 @@ import boto3
 import json
 
 
+def parse_instances(response):
+
+    instance_id_list = []
+    
+    reservations = response['Reservations']
+    
+    for r in reservations:
+        for i in r['Instances']:
+            instance_id_list.append(i['InstanceId'])
+
+    return instance_id_list
+
+def list_instances(ec2_client, instance_name):
+
+    response = ec2_client.describe_instances(
+            Filters=[
+                {
+                    'Name': 'tag:Name',
+                    'Values': [
+                        instance_name
+                    ]
+                },
+            ]
+        )
+
+    return response
+
+def destroyer(instance_name):
+
+    ec2_client = boto3.client('ec2')
+
+    instance_search_response = list_instances(ec2_client, instance_name)
+
+    instance_ids = parse_instances(instance_search_response)
+
+    # Terminate any of the running instances
+    response = ec2_client.terminate_instances(
+            InstanceIds=instance_ids
+        )
+
+    return
+
 def  s3_to_es_prowler(event, context):
+
+    # Going to let this function call terminate the prowler ec2 instance
+    destroyer('Prowler')
 
     s3_client = boto3.client('s3')
 

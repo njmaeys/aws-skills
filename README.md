@@ -10,6 +10,10 @@ When it comes to security best practices I know there is a LOT I need to learn. 
 learning and trying to integrate the tools. Continual learning is the best way I can manage to get the lacking
 security best practices up to speed.
 
+One thing I do know is that my permissions to roles are too open but I went with * permissions to be able to 
+progress at a reasonable clip. More investment would need to be made to properly set only the permissions 
+needed per service for the given role.
+
 ## Elasticsearch
 The elasticsearch is defined in terraform but it made more sense to me to hook up the log groups manually.  
 

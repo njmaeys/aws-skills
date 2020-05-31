@@ -24,7 +24,7 @@ def  launch_prowler(event, context):
             }
         ],
         SecurityGroupIds=[
-           'sg-0562d424164d60a17'
+            'sg-087420ce08a1259b4'
         ],
         InstanceInitiatedShutdownBehavior='terminate',
         IamInstanceProfile={
