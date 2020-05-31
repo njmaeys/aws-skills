@@ -33,8 +33,9 @@ To perform even basic GET requests, your computer must be able to connect to the
 the form of a VPN, managed network, or proxy server. For details on the various forms it can take, see 
 Scenarios and Examples in the Amazon VPC User Guide. For a development-focused example, see Testing VPC Domains.
 ```  
-All that being said I'll try to create a VPN or a Proxy and see if i can connect that way. Beginning to get exhausted
-and am going to throw in the towel at some point.
+All that being said I'll try to create a VPN or a Proxy and see if I can connect that way. Beginning to get exhausted
+and am going to wrap up at some point with this and other known issues. Ultimately even if I don't get it to work I
+think this is the problem... I think.
 
 ## Webserver
 Running on Amazon Linux Images
