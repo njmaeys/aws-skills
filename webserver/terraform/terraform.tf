@@ -42,6 +42,18 @@ resource "aws_security_group" "allow_tls" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
+    ingress {
+        description = "ES"
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = [
+            data.aws_vpc.main.cidr_block,
+            "172.31.0.0/16",
+            "76.92.128.2/32"
+        ]
+    }
+
     egress {
         from_port   = 0
         to_port     = 0
@@ -241,8 +253,9 @@ resource "aws_iam_policy" "stream_policy" {
   "Statement": [
     {
       "Action": [
+        "lambda:*",
         "es:*",
-        "lambda:*"
+        "ec2:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
