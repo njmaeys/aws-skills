@@ -11,3 +11,8 @@ elasticsearch/terraform/terraform.tfstate*
 # webserver
 webserver/terraform/.terraform/
 webserver/terraform/terraform.tfstate*
+
+# prowler
+prowler/.venv/
+prowler/bin/
+prowler/lambda/*.pyc
