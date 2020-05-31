@@ -58,7 +58,7 @@ resource "aws_iam_instance_profile" "prowler_profile" {
 
 ######### LAMBDA #########
 
-# Prowler
+######## Prowler
 resource "aws_lambda_function" "prowler" {
 
   filename         = "../bin/lambdas.zip"
@@ -71,7 +71,27 @@ resource "aws_lambda_function" "prowler" {
 
 }
 
-# S3 to ES
+resource "aws_cloudwatch_event_rule" "prowler_launch_trigger" {
+	name = "TriggerProwlerToLaunch"
+	description = "This schedule triggers prowler to run daily 5am GMT (12am CT)."
+	schedule_expression = "cron(0 5 * * ? *)"
+}
+
+resource "aws_lambda_permission" "prowler_launch_permissions" {
+  statement_id  = "AllowS3Invoke"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.prowler.arn}"
+  principal = "events.amazonaws.com"
+	source_arn = "${aws_cloudwatch_event_rule.prowler_launch_trigger.arn}"
+}
+
+resource "aws_cloudwatch_event_target" "prower_event_target" {
+	rule = "${aws_cloudwatch_event_rule.prowler_launch_trigger.name}"
+	target_id = "cw_prowler_launch"
+	arn = "${aws_lambda_function.prowler.arn}"
+}
+
+######## S3 to ES
 resource "aws_lambda_function" "s3_to_es" {
 
   filename         = "../bin/lambdas.zip"
