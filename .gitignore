@@ -22,4 +22,5 @@ prowler/terraform/.terraform.*
 
 prowler/.venv/
 prowler/bin/
-prowler/lambda/*.pyc
+prowler/lambdas/*.pyc
+prowler/lambdas/__pycache__/

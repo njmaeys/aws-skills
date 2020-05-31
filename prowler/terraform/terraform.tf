@@ -61,12 +61,12 @@ resource "aws_iam_instance_profile" "prowler_profile" {
 # Prowler
 resource "aws_lambda_function" "prowler" {
 
-  filename         = "../bin/lambda.zip"
+  filename         = "../bin/lambdas.zip"
   function_name    = "run_prowler"
   runtime          = "python3.7"
   role             =  aws_iam_role.role_prowler.arn
-  handler          = "lambda/launch_instance.launch_prowler"
-  source_code_hash = filebase64sha256("../bin/lambda.zip")
+  handler          = "lambdas/launch_instance.launch_prowler"
+  source_code_hash = filebase64sha256("../bin/lambdas.zip")
   timeout          = 360
 
 }
@@ -74,12 +74,12 @@ resource "aws_lambda_function" "prowler" {
 # S3 to ES
 resource "aws_lambda_function" "s3_to_es" {
 
-  filename         = "../bin/lambda.zip"
+  filename         = "../bin/lambdas.zip"
   function_name    = "s3_to_es"
   runtime          = "python3.7"
   role             =  aws_iam_role.role_prowler.arn
-  handler          = "lambda/s3_to_es.s3_to_es_prowler"
-  source_code_hash = filebase64sha256("../bin/lambda.zip")
+  handler          = "lambdas/s3_to_es.s3_to_es_prowler"
+  source_code_hash = filebase64sha256("../bin/lambdas.zip")
   timeout          = 360
   layers           = ["arn:aws:lambda:us-west-2:883980837948:layer:python-pip-packages:1"]
 

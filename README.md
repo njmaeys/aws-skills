@@ -32,7 +32,6 @@ AMI Setup
 ## Prowler
 
 TODO - Put lambda that spins up ec2 on cron to run daily
-TODO - Need to figure out a way to terminate EC2 instance on completion  
 - I think it makes sense to have the s3 bucket lambda kill the instance as well since it should be done if the file is in s3  
 
 Prowler appears to be doing a lot of stuff. In the interest of time right now going to try to get results into cloudwatch regardless.  
