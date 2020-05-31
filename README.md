@@ -14,6 +14,10 @@ Version being used
 
 Each subset of the repo has a terraform dir intended to serve as the launcher for the necessary resources.
 
+## Elasticsearch
+The elasticsearch is defined in terraform but it made more sense to me to hook up the log groups manually.  
+I've seen that there is data flowing to the elasticsearch but have not been able to access the kibana app.  
+
 ## Webserver
 Running on Amazon Linux Images
 - I think I'm going to make an AMI with the logger installed as there is setup that has to be done that I don't think I can manage progromatically.
@@ -28,15 +32,11 @@ AMI Setup
 -- You don't need to set access keys or secrets
 
 - Only need to add two things
--- log file location : /var/log/httpd/access\_log
--- cloud watch group : webserver-access-logs
+-- log file location : `/var/log/httpd/access\_log`
+-- cloud watch group : `webserver-access-logs`
 
 Source for helping get logs pushed to cloudwatch:  
 - https://devopscube.com/how-to-setup-and-push-serverapplication-logs-to-aws-cloudwatch/
-
-**Logs**
-- `/var/log/httpd/access_log`
-- TODO - get elasticsearch to read them
 
 ## Prowler
 Can likely put this behind a lambda function that spins up a micro EC2 on a cron scheduler.
