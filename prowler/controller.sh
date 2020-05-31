@@ -51,7 +51,7 @@ usage="$(basename "$0")
 
 Parameters that you may use include:
 
-[ -h ] [ -c ]
+[ -h ] [ -s ] [ -c ] [ -p ] [ -t ]
 
 options:
     -h    show this help text
