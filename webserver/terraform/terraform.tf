@@ -186,6 +186,7 @@ resource "aws_iam_policy" "main_policy" {
   "Statement": [
     {
       "Action": [
+        "s3:*",
         "ec2:*",
         "logs:*",
         "iam:*"

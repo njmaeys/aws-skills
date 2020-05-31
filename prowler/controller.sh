@@ -27,6 +27,16 @@ compress() {
 
 }
 
+# push provision to s3
+pushProvisionerToS3() {
+
+	echo
+	echo "Push provisioner to s3"
+
+	cmd="aws s3 cp ./run_prowler.sh s3://provisioner-scripts/run_prowler.sh --profile $1 --region us-west-2"
+    $cmd
+}
+
 ########### usage ###########
 usage="$(basename "$0") 
 
@@ -37,10 +47,10 @@ Parameters that you may use include:
 options:
     -h    show this help text
     -s    set up the virtualenv and install deps
-    -c    compress the lambda into the zip for deployment"
+    -c    compress the lambda into the zip for deployment
+    -p    push provisioner script to s3"
 
-while getopts 'hsc' o; do
-    # reminder to use --> if i want to add in an argument ${OPTARG}
+while getopts 'hscp:' o; do
 	case "${o}" in
 		h) 
 			echo "$usage"
@@ -51,6 +61,9 @@ while getopts 'hsc' o; do
 			;;
 		c) 
 			compress
+			;;
+		p) 
+			pushProvisionerToS3 ${OPTARG}
 			;;
 		\?)
 			echo "$usage"

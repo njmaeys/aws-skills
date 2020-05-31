@@ -3,8 +3,6 @@ import os
 
 
 def  launch_prowler(event, context):
-    # TODO this will be how i can configure the instance to do things on launch
-    #UserData=open("/var/task/lambda/provision.sh").read(),
 
     ec2_client = boto3.client('ec2')
 
@@ -13,6 +11,7 @@ def  launch_prowler(event, context):
         InstanceType='t2.micro',
         DisableApiTermination=False,
         SubnetId='subnet-b38e4fcb',
+        UserData=open("/var/task/lambda/provisioner.sh").read(),
         MinCount=1,
         MaxCount=1,
         TagSpecifications=[
