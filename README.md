@@ -23,6 +23,7 @@ log groups to stream to it by manual configuration. There has to be something fu
 that would make this whole tool way more understandable.
 
 **From the Docs**  
+https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-vpc-security
 ```
 When you create a domain with VPC access, the endpoint looks similar to a public endpoint:
 
