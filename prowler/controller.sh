@@ -48,7 +48,7 @@ options:
     -h    show this help text
     -s    set up the virtualenv and install deps
     -c    compress the lambda into the zip for deployment
-    -p    push provisioner script to s3"
+    -p    push provisioner script to s3, this does requre a profile to use ie; -p my_cool_profile"
 
 while getopts 'hscp:' o; do
 	case "${o}" in

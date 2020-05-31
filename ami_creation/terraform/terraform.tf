@@ -31,14 +31,13 @@ data "aws_ami" "selected_aws_linux" {
   }
 }
 
-
 ######## INSTANCE ###########
 resource "aws_instance" "web1" {
 
     ami           = data.aws_ami.selected_aws_linux.id
     instance_type = "t2.micro"
 
-    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
+    iam_instance_profile = "arn:aws:iam::883980837948:instance-profile/web_profile"
     subnet_id = "subnet-b38e4fcb"
     vpc_security_group_ids = [
         data.aws_security_group.allow_tls.id
