@@ -89,6 +89,8 @@ resource "aws_instance" "web1" {
         Product = "WebServer"
     }
 
+    user_data = "${file("../launch_webserver.sh")}"
+
     key_name = "general_ssh"
 
 }
@@ -109,6 +111,8 @@ resource "aws_instance" "web2" {
         Name    = "server-two",
         Product = "WebServer"
     }
+
+    user_data = "${file("../launch_webserver.sh")}"
 
     key_name = "general_ssh"
 
@@ -238,8 +242,7 @@ resource "aws_iam_policy" "stream_policy" {
     {
       "Action": [
         "es:*",
-        "lambda:*",
-        "lambda:AWSLambdaVPCAccessExecutionRole"
+        "lambda:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
