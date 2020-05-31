@@ -39,14 +39,16 @@ Source for helping get logs pushed to cloudwatch:
 - https://devopscube.com/how-to-setup-and-push-serverapplication-logs-to-aws-cloudwatch/
 
 ## Prowler
-Can likely put this behind a lambda function that spins up a micro EC2 on a cron scheduler.
-I need to get it running first and figure out the right IAM role permissions it needs.
-Then I need to see what it outputs and figure out how to get it to send that to cloudwatch.
-- Maybe I can pump the results to a JSON file and then stream that as a payload with the cli?
+Prowler appears to be doing a lot of stuff. In the interest of time right now going to try to get results into cloudwatch regardless.  
+I know there are going to be failures that it can't read at the moment but, I need to get logs flowing.
 
-Preliminary steps:
-- sudo yum install git -y
-- sudo yum install jq
-- git clone https://github.com/toniblyx/prowler
-- cd prowler
-- ./prowler
+Thought about trying out kinesis but it is not in the Free Tier, not goin to try but does seem interesting.  
+
+Prowler dumps results to the git dir location in `/output/` so I can copy that to an S3 bucket after the results are done.
+
+TODO - Put lambda that spins up ec2 on cron to run daily
+TODO - Need to figure out a way to terminate EC2 instance on completion - SNS on bucket push?
+Flow:  
+- The `run_prowler` lambda functions spins up and EC2 instance  
+- The user data on the lambda downloads an execution script from s3  
+- The execution script runs prowler with json flag set and then pushes results to S3 on completion  
