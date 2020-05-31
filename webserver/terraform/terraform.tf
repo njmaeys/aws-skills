@@ -1,14 +1,14 @@
 provider "aws" {
-    region  = "us-west-2"
-    profile = "njmaeys"
+  region  = "us-west-2"
+  profile = "njmaeys"
 }
 
 ######### ELB #########
 
 data "aws_vpc" "main" {
-    tags = {
-        Name = "w2-main"
-    }
+  tags = {
+    Name = "w2-main"
+  }
 }
 
 
@@ -16,54 +16,52 @@ data "aws_vpc" "main" {
 
 resource "aws_security_group" "allow_tls" {
 
-    name = "allow_tls"
+  name        = "allow_tls"
+  description = "Allow TLS"
+  vpc_id      = "vpc-1d7e0a65"
 
-    description = "Allow TLS"
+  ingress {
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [
+      data.aws_vpc.main.cidr_block,
+      "172.31.0.0/16",
+      "76.92.128.2/32"
+    ]
+  }
 
-    vpc_id = "vpc-1d7e0a65"
+  ingress {
+    description = "HTTP access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-    ingress {
-        description = "SSH from VPC"
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        cidr_blocks = [
-            data.aws_vpc.main.cidr_block,
-            "172.31.0.0/16",
-            "76.92.128.2/32"
-        ]
-    }
+  ingress {
+    description = "ES"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [
+      data.aws_vpc.main.cidr_block,
+      "172.31.0.0/16",
+      "76.92.128.2/32"
+    ]
+  }
 
-    ingress {
-        description = "HTTP access"
-        from_port   = 80
-        to_port     = 80
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-    ingress {
-        description = "ES"
-        from_port   = 443
-        to_port     = 443
-        protocol    = "tcp"
-        cidr_blocks = [
-            data.aws_vpc.main.cidr_block,
-            "172.31.0.0/16",
-            "76.92.128.2/32"
-        ]
-    }
-
-    egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    tags = {
-        Name = "allow_TLS"
-    }
+  tags = {
+    Name = "allow_TLS"
+  }
 }
 
 data "aws_ami" "selected_aws_linux" {
@@ -87,46 +85,45 @@ data "aws_ami" "selected_aws_linux" {
 # ONE
 resource "aws_instance" "web1" {
 
-    ami           = data.aws_ami.selected_aws_linux.id
-    instance_type = "t2.micro"
+  ami                  = data.aws_ami.selected_aws_linux.id
+  instance_type        = "t2.micro"
+  iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
+  subnet_id            = "subnet-b38e4fcb"
 
-    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
-    subnet_id = "subnet-b38e4fcb"
-    vpc_security_group_ids = [
-        "${aws_security_group.allow_tls.id}"
-    ]
+  vpc_security_group_ids = [
+    "${aws_security_group.allow_tls.id}"
+  ]
 
-    tags = {
-        Name    = "server-one",
-        Product = "WebServer"
-    }
+  tags = {
+    Name    = "server-one",
+    Product = "WebServer"
+  }
 
-    user_data = "${file("../launch_webserver.sh")}"
-
-    key_name = "general_ssh"
+  user_data = "${file("../launch_webserver.sh")}"
+  key_name  = "general_ssh"
 
 }
 
 # TWO
 resource "aws_instance" "web2" {
 
-    ami           = data.aws_ami.selected_aws_linux.id
-    instance_type = "t2.micro"
+  ami                  = data.aws_ami.selected_aws_linux.id
+  instance_type        = "t2.micro"
+  iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
+  subnet_id            = "subnet-c404e78e"
 
-    iam_instance_profile = "${aws_iam_instance_profile.web_profile.id}"
-    subnet_id = "subnet-c404e78e"
-    vpc_security_group_ids = [
-        "${aws_security_group.allow_tls.id}"
-    ]
+  vpc_security_group_ids = [
+    "${aws_security_group.allow_tls.id}"
+  ]
 
-    tags = {
-        Name    = "server-two",
-        Product = "WebServer"
-    }
+  tags = {
+    Name    = "server-two",
+    Product = "WebServer"
+  }
 
-    user_data = "${file("../launch_webserver.sh")}"
+  user_data = "${file("../launch_webserver.sh")}"
 
-    key_name = "general_ssh"
+  key_name = "general_ssh"
 
 }
 
@@ -144,9 +141,9 @@ resource "aws_elb" "web_elb" {
     lb_protocol       = "http"
   }
 
-  instances                   = [
-        "${aws_instance.web1.id}",
-        "${aws_instance.web2.id}",
+  instances = [
+      "${aws_instance.web1.id}",
+      "${aws_instance.web2.id}",
     ]
 
   health_check {

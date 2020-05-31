@@ -1,18 +1,18 @@
 provider "aws" {
-    region  = "us-west-2"
-    profile = "njmaeys"
+  region  = "us-west-2"
+  profile = "njmaeys"
 }
 
 data "aws_vpc" "main" {
-    tags = {
-        Name = "w2-main"
-    }
+  tags = {
+    Name = "w2-main"
+  }
 }
 
 data "aws_security_group" "allow_tls"{
-    tags = {
-        Name = "allow_tls"
-    }
+  tags = {
+    Name = "allow_tls"
+  }
 }
 
 data "aws_ami" "selected_aws_linux" {
@@ -34,22 +34,22 @@ data "aws_ami" "selected_aws_linux" {
 ######## INSTANCE ###########
 resource "aws_instance" "web1" {
 
-    ami           = data.aws_ami.selected_aws_linux.id
-    instance_type = "t2.micro"
+  ami           = data.aws_ami.selected_aws_linux.id
+  instance_type = "t2.micro"
 
-    iam_instance_profile = "arn:aws:iam::883980837948:instance-profile/web_profile"
-    subnet_id = "subnet-b38e4fcb"
-    vpc_security_group_ids = [
-        data.aws_security_group.allow_tls.id
-    ]
+  iam_instance_profile = "arn:aws:iam::883980837948:instance-profile/web_profile"
+  subnet_id = "subnet-b38e4fcb"
+  vpc_security_group_ids = [
+    data.aws_security_group.allow_tls.id
+  ]
 
-    tags = {
-        Name    = "server-one",
-        Product = "WebServer"
-    }
+  tags = {
+    Name    = "server-one",
+    Product = "WebServer"
+  }
 
-    user_data = "${file("../launch_webserver.sh")}"
+  user_data = "${file("../launch_webserver.sh")}"
 
-    key_name = "general_ssh"
+  key_name = "general_ssh"
 
 }

@@ -45,12 +45,11 @@ AMI Setup
 - See README in `ami_creation`
 
 ## Prowler
-
-TODO - Put lambda that spins up ec2 on cron to run daily
-- I think it makes sense to have the s3 bucket lambda kill the instance as well since it should be done if the file is in s3  
-
 Prowler appears to be doing a lot of stuff. In the interest of time right now going to try to get results into cloudwatch regardless.  
-I know there are going to be failures that it can't read at the moment but, I need to get logs flowing.
+
+- I know there are going to be failures that it can't read at the moment but, I need to get logs flowing.  
+- I think it makes sense to have the s3 bucket lambda kill the instance as well since it should be done if the file is in s3.  
+- Thought about trying out kinesis but it is not in the Free Tier, not goin to try but does seem interesting.  
 
 **Flow**  
 Prowler dumps results to the git dir location in `/output/` so I can copy that to an S3 bucket after the results are done.
@@ -62,5 +61,3 @@ Prowler dumps results to the git dir location in `/output/` so I can copy that t
 This could have been done differently for sure but here is the process:  
 - S3 bucket triggers a lambda function to push out the row items to cloudwatch logs
 - The log group of the lambda function is then streamed to Elasticsearch via manual config on the log group  
-
-Thought about trying out kinesis but it is not in the Free Tier, not goin to try but does seem interesting.  

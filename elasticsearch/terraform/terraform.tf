@@ -1,6 +1,6 @@
 provider "aws" {
-    region  = "us-west-2"
-    profile = "njmaeys"
+  region  = "us-west-2"
+  profile = "njmaeys"
 }
 
 variable "domain" {
@@ -58,15 +58,15 @@ resource "aws_elasticsearch_domain" "es" {
 
   access_policies = <<CONFIG
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "es:*",
-            "Principal": "*",
-            "Effect": "Allow",
-            "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${var.domain}/*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "es:*",
+      "Principal": "*",
+      "Effect": "Allow",
+      "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${var.domain}/*"
+    }
+  ]
 }
 CONFIG
 
